@@ -13,7 +13,7 @@ with conn:
     conn.commit()
 conn.close()
 
-
+'''
 conn = sqlite3.connect('test.db')
 with conn:
     cur = conn.cursor()
@@ -27,6 +27,23 @@ with conn:
                 ("Doe", "Blow", "DoeBlow@joeblow.com"))
     cur.execute("INSERT INTO tbl_persons (col_fname,col_lname,col_email) VALUES (?,?,?)",
                 ("Kevin", "Bacon", "kbacon@joeblow.com"))
+
+    conn.commit()
+conn.close()
+'''
+
+conn = sqlite3.connect('test.db')
+with conn:
+    cur = conn.cursor()
+    cur.execute("SELECT col_fname, col_lname, col_email FROM tbl_persons WHERE col_fname = 'Sara'")
+    people = cur.fetchall()
+    for person in people:
+        print("First Name: {}\nLast Name: {}\nEmail: {}".format(person[0], person[1], person[2]))
+
+
+
+
+
 
     conn.commit()
 conn.close()
