@@ -18,6 +18,8 @@ conn = sqlite3.connect('test.db')
 with conn:
     cur = conn.cursor()
     cur.execute("INSERT INTO tbl_persons (col_fname,col_lname,col_email) VALUES (?,?,?)",
+                ("Joe", "Blow", "JoeBlow@joeblow.com"))
+    cur.execute("INSERT INTO tbl_persons (col_fname,col_lname,col_email) VALUES (?,?,?)",
                 ("Sara", "Blow", "SaraBlow@joeblow.com"))
     cur.execute("INSERT INTO tbl_persons (col_fname,col_lname,col_email) VALUES (?,?,?)",
                 ("Moe", "Blow", "MoeBlow@joeblow.com"))
@@ -25,10 +27,6 @@ with conn:
                 ("Doe", "Blow", "DoeBlow@joeblow.com"))
     cur.execute("INSERT INTO tbl_persons (col_fname,col_lname,col_email) VALUES (?,?,?)",
                 ("Kevin", "Bacon", "kbacon@joeblow.com"))
-
-
-
-
 
     conn.commit()
 conn.close()
