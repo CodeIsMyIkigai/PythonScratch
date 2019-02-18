@@ -6,7 +6,8 @@ import tkinter as tk
 import tkinter.filedialog
 import tkinter.messagebox
 import os
-
+import FileMovingDrillPg123_db as fmd
+import datetime
 
 def folderSelector(textArea):
     sourcepath = tk.filedialog.askdirectory()
@@ -34,17 +35,20 @@ def moveFiles(self):
         tk.messagebox.showinfo("Problem", "Please select a destination directory!")
         return
 
+    batch = datetime.datetime.now()
     files = os.listdir(self.txt_Dir1.get())
     for file in files:
         if file.endswith(".txt"):
-            mtime = os.path.getmtime(os.path.join(self.txt_Dir1.get(), file))
-            print("Found a text file: {} mtime: {}".format(file, mtime))
-            print(os.path.abspath(self.txt_Dir2.get()))
-            os.rename(os.path.join(self.txt_Dir1.get(), file), os.path.join(self.txt_Dir2.get(), file))
+            sourceFile = os.path.join(self.txt_Dir1.get(), file)
+            destFile = os.path.join(self.txt_Dir2.get(), file)
+            os.rename(sourceFile, destFile)
+            mtime = os.path.getmtime(destFile)
+            fmd.logMove(batch, destFile, mtime)
+    fmd.printLogs(batch)
 
 
 def closeProgram(self):
-    print("close")
+    root.destroy()
 
 class ParentWindow(Frame):
     def __init__(self, master, *args, **kwargs):
@@ -76,6 +80,7 @@ class ParentWindow(Frame):
 
 
 if __name__ == "__main__":
+    fmd.createDB()
     root = tk.Tk()
     App = ParentWindow(root)
     root.mainloop()
