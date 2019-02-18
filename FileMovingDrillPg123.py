@@ -8,6 +8,7 @@ import tkinter.messagebox
 import os
 import FileMovingDrillPg123_db as fmd
 import datetime
+import shutil
 
 def folderSelector(textArea):
     sourcepath = tk.filedialog.askdirectory()
@@ -25,24 +26,28 @@ def dirSelect2(self):
 
 def moveFiles(self):
     print("Move")
-    print(self.txt_Dir1.get())
-    print(self.txt_Dir2.get())
 
-    if self.txt_Dir1.get() == '':
+    sourceDir = self.txt_Dir1.get()
+    destDir = self.txt_Dir2.get()
+
+    print(sourceDir)
+    print(destDir)
+
+    if sourceDir == '':
         tk.messagebox.showinfo("Problem", "Please select a source directory!")
         return
-    if self.txt_Dir2.get() == '':
+    if destDir == '':
         tk.messagebox.showinfo("Problem", "Please select a destination directory!")
         return
 
     batch = datetime.datetime.now()
-    files = os.listdir(self.txt_Dir1.get())
+    files = os.listdir(sourceDir)
     for file in files:
         if file.endswith(".txt"):
-            sourceFile = os.path.join(self.txt_Dir1.get(), file)
-            destFile = os.path.join(self.txt_Dir2.get(), file)
-            os.rename(sourceFile, destFile)
-            mtime = os.path.getmtime(destFile)
+            sourceFile = os.path.join(sourceDir, file)
+            destFile = os.path.join(destDir, file)
+            shutil.move(sourceFile, destDir)
+            mtime = datetime.datetime.fromtimestamp(os.path.getmtime(destFile))
             fmd.logMove(batch, destFile, mtime)
     fmd.printLogs(batch)
 
